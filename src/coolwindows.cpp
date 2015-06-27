@@ -3,8 +3,6 @@
 
 #include "coolwindows.h"
 
-
-
 int lua_DoWinInput(lua_State* state)
 {
 	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
@@ -23,6 +21,21 @@ int lua_DoWinInput(lua_State* state)
 	}
 	
 	LUA->PushBool(PostMessageA((HWND)LUA->GetUserdata(1), (WPARAM)LUA->GetNumber(2), (UINT)LUA->GetNumber(3), lparam));
+	return 1;
+}
+
+int lua_ShowWindow(lua_State* state)
+{
+	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
+	LUA->CheckType(2, GarrysMod::Lua::Type::NUMBER);
+
+	if (LUA->GetNumber(2) > 11)
+	{
+		LUA->PushNil();
+		return 1;
+	}
+
+	LUA->PushBool(ShowWindow((HWND)LUA->GetUserdata(1), (UINT)LUA->GetNumber(2)));
 	return 1;
 }
 
@@ -143,6 +156,9 @@ GMOD_MODULE_OPEN()
 
 		LUA->PushCFunction(lua_DoWinInput);
 		LUA->SetField(-2, "DoWinInput");
+
+		LUA->PushCFunction(lua_ShowWindow);
+		LUA->SetField(-2, "ShowWindow");
 
 		LUA->PushCFunction(lua_FindWindow);
 		LUA->SetField(-2, "FindWindow");
