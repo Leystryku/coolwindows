@@ -49,6 +49,25 @@ int lua_IsHungAppWindow(lua_State* state)
 	return 1;
 }
 
+int lua_WinExec(lua_State* state)
+{
+	const char* procdir = LUA->GetString(1);
+
+	LUA->CheckType(2, GarrysMod::Lua::Type::NUMBER); // 1 is reccomended
+
+	if (procdir && strlen(procdir) == 0)
+		procdir = 0;
+
+	if (LUA->GetNumber(2) > 11 || !procdir)
+	{
+		LUA->PushNil();
+		return 1;
+	}
+
+	LUA->PushNumber(WinExec(procdir, (UINT)LUA->GetNumber(2)));
+	return 1;
+}
+
 int lua_FindWindow(lua_State* state)
 {
 
@@ -172,6 +191,9 @@ GMOD_MODULE_OPEN()
 		
 		LUA->PushCFunction(lua_IsHungAppWindow);
 		LUA->SetField(-2, "IsHungAppWindow");
+		
+		LUA->PushCFunction(lua_WinExec);
+		LUA->SetField(-2, "WinExec");
 
 		LUA->PushCFunction(lua_FindWindow);
 		LUA->SetField(-2, "FindWindow");
