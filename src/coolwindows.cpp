@@ -2,9 +2,9 @@
 #pragma once
 
 #include "coolwindows.h"
-
-
-
+  
+  
+  
 int lua_DoWinInput(lua_State* state)
 {
 	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
@@ -26,11 +26,53 @@ int lua_DoWinInput(lua_State* state)
 	return 1;
 }
 
+int lua_ShowWindow(lua_State* state)
+{
+	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
+	LUA->CheckType(2, GarrysMod::Lua::Type::NUMBER);
+
+	if (LUA->GetNumber(2) > 11)
+	{
+		LUA->PushNil();
+		return 1;
+	}
+
+	LUA->PushBool(ShowWindow((HWND)LUA->GetUserdata(1), (UINT)LUA->GetNumber(2)));
+	return 1;
+}
+
+int lua_IsHungAppWindow(lua_State* state)
+{
+	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
+
+	LUA->PushBool(IsHungAppWindow((HWND)LUA->GetUserdata(1)));
+	return 1;
+}
+
+int lua_WinExec(lua_State* state)
+{
+	const char* procdir = LUA->GetString(1);
+
+	LUA->CheckType(2, GarrysMod::Lua::Type::NUMBER); // 1 is reccomended
+
+	if (procdir && strlen(procdir) == 0)
+		procdir = 0;
+
+	if (LUA->GetNumber(2) > 11 || !procdir)
+	{
+		LUA->PushNil();
+		return 1;
+	}
+
+	LUA->PushNumber(WinExec(procdir, (UINT)LUA->GetNumber(2))); // Check out the return values: https://msdn.microsoft.com/en-us/library/windows/desktop/ms687393%28v=vs.85%29.aspx
+	return 1;
+}
+
 int lua_FindWindow(lua_State* state)
 {
 
-	const char*cl = LUA->GetString(1);
-	const char*win = LUA->GetString(2);
+	const char* cl = LUA->GetString(1);
+	const char* win = LUA->GetString(2);
 	
 	if (cl && strlen(cl) == 0)
 		cl = 0;
@@ -38,7 +80,7 @@ int lua_FindWindow(lua_State* state)
 	if (win && strlen(win) == 0)
 		win = 0;
 
-	if (!win&&!cl)
+	if (!win && !cl)
 	{
 		LUA->PushNil();
 		return 1;
@@ -58,8 +100,8 @@ int lua_FindWindowEx(lua_State* state)
 {
 	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
 
-	const char*cl = LUA->GetString(2);
-	const char*win = LUA->GetString(3);
+	const char* cl = LUA->GetString(2);
+	const char* win = LUA->GetString(3);
 
 	if (cl && strlen(cl) == 0)
 		cl = 0;
@@ -67,7 +109,7 @@ int lua_FindWindowEx(lua_State* state)
 	if (win && strlen(win) == 0)
 		win = 0;
 
-	if (!win&&!cl)
+	if (!win && !cl)
 	{
 		LUA->PushNil();
 		return 1;
@@ -143,6 +185,15 @@ GMOD_MODULE_OPEN()
 
 		LUA->PushCFunction(lua_DoWinInput);
 		LUA->SetField(-2, "DoWinInput");
+
+		LUA->PushCFunction(lua_ShowWindow);
+		LUA->SetField(-2, "ShowWindow");
+		
+		LUA->PushCFunction(lua_IsHungAppWindow);
+		LUA->SetField(-2, "IsHungAppWindow");
+		
+		LUA->PushCFunction(lua_WinExec);
+		LUA->SetField(-2, "WinExec");
 
 		LUA->PushCFunction(lua_FindWindow);
 		LUA->SetField(-2, "FindWindow");
