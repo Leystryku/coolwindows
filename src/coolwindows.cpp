@@ -39,6 +39,14 @@ int lua_ShowWindow(lua_State* state)
 	return 1;
 }
 
+int lua_IsHungAppWindow(lua_State* state)
+{
+	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
+
+	LUA->PushBool(IsHungAppWindow((HWND)LUA->GetUserdata(1)));
+	return 1;
+}
+
 int lua_FindWindow(lua_State* state)
 {
 
@@ -159,6 +167,9 @@ GMOD_MODULE_OPEN()
 
 		LUA->PushCFunction(lua_ShowWindow);
 		LUA->SetField(-2, "ShowWindow");
+		
+		LUA->PushCFunction(lua_IsHungAppWindow);
+		LUA->SetField(-2, "IsHungAppWindow");
 
 		LUA->PushCFunction(lua_FindWindow);
 		LUA->SetField(-2, "FindWindow");
