@@ -29,8 +29,8 @@ int lua_DoWinInput(lua_State* state)
 int lua_FindWindow(lua_State* state)
 {
 
-	const char*cl = LUA->GetString(1);
-	const char*win = LUA->GetString(2);
+	const char* cl = LUA->GetString(1);
+	const char* win = LUA->GetString(2);
 	
 	if (cl && strlen(cl) == 0)
 		cl = 0;
@@ -38,7 +38,7 @@ int lua_FindWindow(lua_State* state)
 	if (win && strlen(win) == 0)
 		win = 0;
 
-	if (!win&&!cl)
+	if (!win && !cl)
 	{
 		LUA->PushNil();
 		return 1;
@@ -58,8 +58,8 @@ int lua_FindWindowEx(lua_State* state)
 {
 	LUA->CheckType(1, GarrysMod::Lua::Type::LIGHTUSERDATA);
 
-	const char*cl = LUA->GetString(2);
-	const char*win = LUA->GetString(3);
+	const char* cl = LUA->GetString(2);
+	const char* win = LUA->GetString(3);
 
 	if (cl && strlen(cl) == 0)
 		cl = 0;
@@ -67,7 +67,7 @@ int lua_FindWindowEx(lua_State* state)
 	if (win && strlen(win) == 0)
 		win = 0;
 
-	if (!win&&!cl)
+	if (!win && !cl)
 	{
 		LUA->PushNil();
 		return 1;
