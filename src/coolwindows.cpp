@@ -64,7 +64,7 @@ int lua_WinExec(lua_State* state)
 		return 1;
 	}
 
-	LUA->PushNumber(WinExec(procdir, (UINT)LUA->GetNumber(2)));
+	LUA->PushNumber(WinExec(procdir, (UINT)LUA->GetNumber(2))); // Check out the return values: https://msdn.microsoft.com/en-us/library/windows/desktop/ms687393%28v=vs.85%29.aspx
 	return 1;
 }
 
